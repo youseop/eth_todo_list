@@ -37,6 +37,8 @@ App = {
     loadAccount: async () => {
         App.account = web3.eth.accounts[0];
         console.log("load account...", App.account);
+
+        web3.eth.defaultAccount = App.account;
     },
 
     loadContract: async () => {
@@ -46,8 +48,8 @@ App = {
 
         App.todoList = await App.contracts.TodoList.deployed();
         
-        console.log(todoList);
-        console.log(App.todoList);
+        // console.log(todoList);
+        // console.log(App.todoList);
     },
 
     render: async() => {
@@ -92,6 +94,13 @@ App = {
             // Show the task
             $newTaskTemplate.show()
         }
+    },
+
+    createTask: async () => {
+        App.setLoading(true);
+        const content = $('#newTask').val();
+        await App.todoList.createTask(content);
+        window.location.reload();
     },
     
     toggleCompleted: () => {
